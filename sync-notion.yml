@@ -1,0 +1,29 @@
+name: Sync Notion → data.json
+
+on:
+  # 每天北京时间 4:00 自动运行（UTC 20:00 前一天）
+  schedule:
+    - cron: "0 20 * * *"
+  # 也可以在 GitHub 仓库页面手动触发
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 仓库
+        uses: actions/checkout@v4
+
+      - name: 拉取 Notion 数据
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python fetch_notion.py
+
+      - name: 提交 data.json（如有变化）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --cached --quiet || git commit -m "chore: 自动同步 Notion 数据 $(date -u +'%Y-%m-%d')"
+          git push
