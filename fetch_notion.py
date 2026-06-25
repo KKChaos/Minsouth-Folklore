@@ -9,7 +9,7 @@ import json
 import urllib.request
 import urllib.error
 
-DATABASE_ID = "3681313e-55f3-80ee-adf4-e216de4f3112"
+DATABASE_ID = "3681313e-55f3-80e8-948b-d3b4b9c375ee"
 NOTION_VERSION = "2022-06-28"
 
 def notion_request(path, payload=None):
